@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buttercup's Bolt &amp; Star Pop</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Fredoka & Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --emerald-main: #10b981;
+      --emerald-deep: #059669;
+      --lime-main: #84cc16;
+      --lime-bright: #bef264;
+      --ink-dark: #0f172a;
+      --gold-spark: #fbbf24;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f0fdf6;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.24) 0%, transparent 28%),
+        radial-gradient(circle at 86% 18%, rgba(132, 204, 22, 0.24) 0%, transparent 30%),
+        radial-gradient(circle at 50% 92%, rgba(251, 191, 36, 0.16) 0%, transparent 35%);
+      color: var(--ink-dark);
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      min-height: 100dvh;
+    }
+
+    .font-pop {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Fluid Responsive Typography via clamp() */
+    .fluid-hero {
+      font-size: clamp(1.9rem, 6.2vw, 3.35rem);
+      line-height: 1.08;
+    }
+
+    .fluid-heading {
+      font-size: clamp(1.35rem, 4.4vw, 2.25rem);
+      line-height: 1.15;
+    }
+
+    .fluid-reveal-banner {
+      font-size: clamp(2.1rem, 6.5vw, 3.8rem);
+      line-height: 1.08;
+    }
+
+    /* Crisp Comic-Pop Cards, Pills & Buttons */
+    .pop-card {
+      background: rgba(255, 255, 255, 0.96);
+      border: 3.5px solid #0f172a;
+      box-shadow: 0 12px 28px -10px rgba(16, 185, 129, 0.28), 0 6px 0 #0f172a;
+      border-radius: 1.75rem;
+    }
+
+    .pop-pill {
+      border: 2.5px solid #0f172a;
+      box-shadow: 0 3px 0 #0f172a;
+    }
+
+    .pop-btn {
+      border: 3px solid #0f172a;
+      box-shadow: 0 5px 0 #0f172a;
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.12s ease, background-color 0.15s ease;
+      cursor: pointer;
+      touch-action: manipulation;
+      min-height: 44px;
+    }
+
+    .pop-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #0f172a;
+    }
+
+    .pop-btn:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #0f172a;
+    }
+
+    .pop-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Bouncy & Pop Micro-Interactions */
+    @keyframes buttercupBounce {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-7px) scale(1.03); }
+    }
+
+    .animate-buttercup-bounce {
+      animation: buttercupBounce 2.5s ease-in-out infinite;
+    }
+
+    @keyframes screenEnter {
+      0% { transform: scale(0.88); opacity: 0; }
+      75% { transform: scale(1.02); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .animate-screen-enter {
+      animation: screenEnter 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    @keyframes popLabelFloat {
+      0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
+      75% { transform: translate(-50%, -115%) scale(1.15); opacity: 1; }
+      100% { transform: translate(-50%, -145%) scale(1.2); opacity: 0; }
+    }
+
+    .pop-label {
+      position: absolute;
+      pointer-events: none;
+      white-space: nowrap;
+      animation: popLabelFloat 0.56s ease-out forwards;
+      z-index: 35;
+    }
+
+    @keyframes sparkleBurst {
+      0% { transform: translate(-50%, -50%) scale(0.4) rotate(0deg); opacity: 1; }
+      100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.2) rotate(180deg); opacity: 0; }
+    }
+
+    .sparkle-particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      border: 1.5px solid #0f172a;
+      pointer-events: none;
+      animation: sparkleBurst 0.52s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      z-index: 30;
+    }
+
+    @keyframes gentleNudgeShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+
+    .animate-nudge {
+      animation: gentleNudgeShake 0.3s ease-in-out;
+    }
+
+    @keyframes confettiDrop {
+      0% { transform: translateY(-24px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(440px) rotate(620deg); opacity: 0; }
+    }
+
+    .confetti-bit {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 1.5px solid #0f172a;
+      border-radius: 3px;
+      animation: confettiDrop 2.4s linear infinite;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-between p-3 sm:p-6">
+
+  <!-- Top HUD with Compact Buttercup SVG Portrait, Targets (0/10), Letters (0/8) & Restart -->
+  <header class="w-full max-w-3xl flex flex-wrap items-center justify-between gap-2 mb-4 z-10">
+    <div class="flex items-center gap-2.5 bg-white pop-pill px-3 py-1.5 rounded-2xl">
+      <!-- Compact Custom SVG Portrait of Buttercup -->
+      <svg class="w-10 h-10 sm:w-11 sm:h-11 shrink-0" viewBox="0 0 100 100" role="img" aria-label="Buttercup portrait with black bob hair, emerald/lime dress, big green eyes, and bold confident expression">
+        <!-- Back Black Bob & Flips -->
+        <path d="M22,36 L10,28 L18,46 L12,56 L28,58 Z" fill="#0f172a"/>
+        <path d="M78,36 L90,28 L82,46 L88,56 L72,58 Z" fill="#0f172a"/>
+        <path d="M24,38 C24,14 76,14 76,38 L78,56 L22,56 Z" fill="#0f172a"/>
+
+        <!-- Emerald & Lime Dress Accent -->
+        <path d="M32,76 L68,76 L72,96 L28,96 Z" fill="#10b981" stroke="#0f172a" stroke-width="3.2" stroke-linejoin="round"/>
+        <rect x="30" y="83" width="40" height="5" fill="#84cc16"/>
+
+        <!-- Buttercup Head -->
+        <ellipse cx="50" cy="48" rx="26" ry="23" fill="#ffe0bd" stroke="#0f172a" stroke-width="3.5"/>
+
+        <!-- Black Bangs with Center Part -->
+        <path d="M24,45 L24,24 L76,24 L76,45 L54,45 L50,31 L46,45 Z" fill="#0f172a" stroke="#0f172a" stroke-width="2.6" stroke-linejoin="round"/>
+
+        <!-- Big Green Eyes & Bold Confident Brows -->
+        <circle cx="40" cy="51" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="2.4"/>
+        <circle cx="41.5" cy="51.5" r="5.8" fill="#10b981"/>
+        <circle cx="42" cy="51.5" r="3.8" fill="#0f172a"/>
+        <circle cx="39.5" cy="49" r="2" fill="#ffffff"/>
+        <path d="M31,43 L48,47" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round"/>
+
+        <circle cx="60" cy="51" r="8.5" fill="#ffffff" stroke="#0f172a" stroke-width="2.4"/>
+        <circle cx="58.5" cy="51.5" r="5.8" fill="#10b981"/>
+        <circle cx="58" cy="51.5" r="3.8" fill="#0f172a"/>
+        <circle cx="60.5" cy="49" r="2" fill="#ffffff"/>
+        <path d="M69,43 L52,47" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round"/>
+
+        <!-- Bold Confident Smirk -->
+        <path d="M44,63 Q51,67 57,61" fill="none" stroke="#0f172a" stroke-width="2.8" stroke-linecap="round"/>
+      </svg>
+
+      <div class="leading-tight">
+        <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">Buttercup's Bolt &amp; Star Pop</span>
+        <div class="flex items-center gap-2 text-xs sm:text-sm font-extrabold text-[#0f172a]">
+          <span class="bg-emerald-100 border border-slate-900 rounded-lg px-2 py-0.5">
+            Targets: <strong id="hud-targets" class="font-pop text-emerald-800">0/10</strong>
+          </span>
+          <span class="bg-lime-100 border border-slate-900 rounded-lg px-2 py-0.5">
+            Letters: <strong id="hud-letters" class="font-pop text-lime-800">0/8</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Restart Button -->
+      <button
+        id="btn-restart"
+        type="button"
+        aria-label="Restart Game"
+        class="pop-btn bg-lime-300 hover:bg-lime-200 px-3.5 py-2 rounded-2xl font-extrabold text-xs sm:text-sm text-[#0f172a] flex items-center gap-1"
+      >
+        <span>↺</span>
+        <span>Restart</span>
+      </button>
+
+      <!-- Sound Toggle -->
+      <button
+        id="btn-sound"
+        type="button"
+        aria-label="Toggle Sound Effects"
+        class="pop-btn bg-white hover:bg-emerald-50 px-3 py-2 rounded-2xl font-extrabold text-xs sm:text-sm text-[#0f172a] flex items-center gap-1"
+      >
+        <span id="sound-emoji">🔊</span>
+        <span class="hidden sm:inline" id="sound-text">SFX</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Single-File Game Stage -->
+  <main class="w-full max-w-3xl pop-card relative overflow-hidden p-4 sm:p-8 my-auto z-10">
+
+    <!-- INTRO / START SCREEN -->
+    <section id="screen-intro" class="flex flex-col items-center text-center space-y-5 animate-screen-enter">
+      <div class="inline-flex items-center gap-2 bg-lime-200 text-[#0f172a] font-extrabold text-xs sm:text-sm uppercase tracking-wider px-4 py-1.5 rounded-full pop-pill">
+        <span>⚡</span>
+        <span>Fast ~20–30s Pop &amp; Unscramble</span>
+        <span>⭐</span>
+      </div>
+
+      <h2 class="font-pop fluid-hero font-bold text-emerald-600 drop-shadow-[2px_2px_0_#0f172a]">
+        BUTTERCUP'S BOLT &amp; STAR POP!
+      </h2>
+
+      <!-- Buttercup Hero Illustration -->
+      <div class="relative animate-buttercup-bounce my-1">
+        <svg class="w-48 h-52 sm:w-56 sm:h-60 mx-auto drop-shadow-[0_10px_14px_rgba(16,185,129,0.25)]" viewBox="0 0 240 240" role="img" aria-label="Buttercup in action pose with black bob hair, big green eyes, and emerald/lime dress">
+          <!-- Black Bob Hair with Flips -->
+          <path d="M60,86 L38,70 L54,104 L44,126 L70,128 Z" fill="#0f172a"/>
+          <path d="M180,86 L202,70 L186,104 L196,126 L170,128 Z" fill="#0f172a"/>
+          <path d="M64,90 C64,48 176,48 176,90 L180,124 L60,124 Z" fill="#0f172a"/>
+
+          <!-- Arms -->
+          <path d="M90,158 L52,138 C44,134 41,145 49,150 L86,170 Z" fill="#ffe0bd" stroke="#0f172a" stroke-width="3.8" stroke-linejoin="round"/>
+          <circle cx="48" cy="143" r="10" fill="#ffe0bd" stroke="#0f172a" stroke-width="3.8"/>
+
+          <path d="M150,158 L188,136 C196,131 200,142 192,148 L154,170 Z" fill="#ffe0bd" stroke="#0f172a" stroke-width="3.8" stroke-linejoin="round"/>
+          <circle cx="192" cy="140" r="10" fill="#ffe0bd" stroke="#0f172a" stroke-width="3.8"/>
+
+          <!-- Legs & Mary Jane Shoes -->
+          <rect x="100" y="186" width="14" height="32" rx="6" fill="#ffffff" stroke="#0f172a" stroke-width="3.8"/>
+          <rect x="126" y="186" width="14" height="32" rx="6" fill="#ffffff" stroke="#0f172a" stroke-width="3.8"/>
+          <path d="M97,210 H117 V220 C117,225 97,225 97,220 Z" fill="#0f172a"/>
+          <path d="M123,210 H143 V220 C143,225 123,225 123,220 Z" fill="#0f172a"/>
+
+          <!-- Emerald & Lime Dress -->
+          <path d="M90,148 L150,148 L158,188 L82,188 Z" fill="#10b981" stroke="#0f172a" stroke-width="4" stroke-linejoin="round"/>
+          <rect x="85" y="162" width="70" height="12" fill="#84cc16"/>
+
+          <!-- Buttercup's Head -->
+          <ellipse cx="120" cy="105" rx="54" ry="46" fill="#ffe0bd" stroke="#0f172a" stroke-width="4"/>
+
+          <!-- Black Bangs -->
+          <path d="M66,101 L66,64 L174,64 L174,101 L128,101 L120,78 L112,101 Z" fill="#0f172a" stroke="#0f172a" stroke-width="3.5" stroke-linejoin="round"/>
+
+          <!-- Big Green Eyes & Bold Brows -->
+          <circle cx="97" cy="112" r="19" fill="#ffffff" stroke="#0f172a" stroke-width="3.2"/>
+          <circle cx="100" cy="113" r="13.5" fill="#10b981"/>
+          <circle cx="101" cy="113" r="9" fill="#0f172a"/>
+          <circle cx="96" cy="108" r="4.5" fill="#ffffff"/>
+          <path d="M77,97 L116,105" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+
+          <circle cx="143" cy="112" r="19" fill="#ffffff" stroke="#0f172a" stroke-width="3.2"/>
+          <circle cx="140" cy="113" r="13.5" fill="#10b981"/>
+          <circle cx="139" cy="113" r="9" fill="#0f172a"/>
+          <circle cx="135" cy="108" r="4.5" fill="#ffffff"/>
+          <path d="M163,97 L124,105" stroke="#0f172a" stroke-width="4.5" stroke-linecap="round"/>
+
+          <!-- Bold Confident Grin -->
+          <path d="M107,133 Q120,144 134,132 Z" fill="#ffffff" stroke="#0f172a" stroke-width="3.2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <p class="text-sm sm:text-base font-bold text-[#1e293b] max-w-xl bg-emerald-50 border-2 border-slate-900 rounded-2xl p-4">
+        Pop <strong class="text-emerald-700">10 floating emerald bubbles &amp; lime stars</strong> in ~20–30 seconds to gather all <strong class="text-emerald-700">8 scrambled letters</strong> (plus 2 bonus star pops!), then unscramble them into the 8-slot puzzle!
+      </p>
+
+      <button
+        id="btn-start-game"
+        type="button"
+        class="pop-btn bg-gradient-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-[#0f172a] font-pop text-xl sm:text-2xl font-bold px-8 py-3.5 rounded-2xl"
+      >
+        POP &amp; UNSCRAMBLE! ⚡
+      </button>
+    </section>
+
+    <!-- STAGE 1: ~20-30s FAST POPPING GAME (10 FLOATING TARGETS) -->
+    <section id="screen-stage1" class="hidden flex-col items-center text-center space-y-3.5">
+      <div class="w-full max-w-xl flex flex-wrap items-center justify-between gap-2">
+        <span class="bg-lime-200 text-[#0f172a] text-xs sm:text-sm font-extrabold uppercase px-3.5 py-1.5 rounded-full pop-pill">
+          Stage 1 • Pop 10 Floating Targets
+        </span>
+        <span class="bg-emerald-100 text-[#0f172a] text-xs sm:text-sm font-extrabold px-3.5 py-1.5 rounded-full pop-pill">
+          Popped: <strong id="stage1-popped" class="font-pop text-emerald-800">0</strong> / 10
+        </span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="w-full max-w-xl h-3.5 bg-emerald-100 border-2 border-slate-900 rounded-full overflow-hidden">
+        <div
+          id="stage1-progress"
+          class="h-full bg-gradient-to-r from-emerald-500 via-lime-400 to-amber-400 transition-all duration-200"
+          style="width: 0%"
+        ></div>
+      </div>
+
+      <!-- Collected Letters Strip (8 Letters) -->
+      <div class="w-full max-w-xl bg-emerald-50 border-2 border-slate-900 rounded-2xl p-2.5 flex items-center justify-center gap-1.5 flex-wrap">
+        <span class="text-xs font-extrabold uppercase text-emerald-950 mr-1">Collected Letters:</span>
+        <div id="stage1-letters" class="flex gap-1.5 min-h-[34px] items-center flex-wrap justify-center">
+          <span class="text-xs font-semibold text-slate-500">Tap bubbles &amp; stars to collect 8 letters...</span>
+        </div>
+      </div>
+
+      <!-- Playfield Arena -->
+      <div
+        id="pop-playfield"
+        class="relative w-full max-w-xl h-72 sm:h-80 bg-gradient-to-b from-white via-emerald-50/90 to-lime-100/80 border-3 border-slate-900 rounded-3xl overflow-hidden shadow-inner"
+      >
+        <span class="pointer-events-none absolute top-3 left-4 text-emerald-400 text-lg">✦</span>
+        <span class="pointer-events-none absolute top-5 right-5 text-lime-500 text-lg">⭐</span>
+        <span class="pointer-events-none absolute bottom-3 left-6 text-emerald-500 text-sm">⚡</span>
+      </div>
+
+      <!-- Smooth Stage 1 -> Stage 2 Transition Banner -->
+      <div id="stage1-complete" class="hidden w-full max-w-xl bg-lime-100 border-3 border-slate-900 rounded-2xl p-4 animate-screen-enter">
+        <p class="font-extrabold text-[#0f172a] text-base sm:text-lg">
+          ⭐ All 10 targets popped &amp; all <strong>8 scrambled letters</strong> collected!
+        </p>
+        <button
+          type="button"
+          id="btn-to-stage2"
+          class="mt-3 pop-btn bg-gradient-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-[#0f172a] font-pop text-xl font-bold px-7 py-2.5 rounded-xl w-full sm:w-auto"
+        >
+          UNSCRAMBLE THE 8 LETTERS →
+        </button>
+      </div>
+    </section>
+
+    <!-- STAGE 2: 8-SLOT WORD UNSCRAMBLE PUZZLE (ZERO PREMATURE HINTS) -->
+    <section id="screen-stage2" class="hidden flex-col items-center text-center space-y-4">
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <span class="bg-lime-200 text-[#0f172a] text-xs font-extrabold uppercase px-3.5 py-1.5 rounded-full pop-pill">Stage 2 • Word Unscramble</span>
+        <span class="bg-white text-emerald-800 text-xs font-extrabold uppercase px-3.5 py-1.5 rounded-full pop-pill">8 Answer Slots</span>
+      </div>
+
+      <h2 class="font-pop fluid-heading font-bold text-[#0f172a]">
+        UNSCRAMBLE THE 8 LETTERS!
+      </h2>
+
+      <p class="text-xs sm:text-sm font-semibold text-slate-700 max-w-md">
+        Tap a letter tile in the bank below to place it in the next open slot. Tap any filled slot to send the letter back!
+      </p>
+
+      <!-- 8 Answer Slots + Bank Below -->
+      <div class="w-full max-w-lg bg-emerald-50/90 border-3 border-slate-900 rounded-2xl p-4 space-y-4">
+        <!-- 8 Answer Slots -->
+        <div id="answer-slots" class="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+          <!-- Populated dynamically -->
+        </div>
+
+        <!-- Controls: Shuffle & Clear -->
+        <div class="flex items-center justify-center gap-2.5 pt-0.5">
+          <button
+            type="button"
+            id="btn-shuffle"
+            class="pop-btn bg-white hover:bg-lime-100 text-[#0f172a] font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl"
+          >
+            Shuffle 🔀
+          </button>
+          <button
+            type="button"
+            id="btn-clear"
+            class="pop-btn bg-white hover:bg-rose-100 text-[#0f172a] font-extrabold text-xs sm:text-sm px-4 py-2 rounded-xl"
+          >
+            Clear ↺
+          </button>
+        </div>
+
+        <!-- Scrambled Letter Tile Bank Below Slots -->
+        <div class="space-y-1.5 pt-1 border-t-2 border-emerald-200">
+          <span class="text-xs font-extrabold uppercase text-emerald-950 block">Letter Bank:</span>
+          <div id="letter-bank" class="flex flex-wrap justify-center gap-2">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Check Word Button & Feedback -->
+      <div class="w-full max-w-md space-y-2.5">
+        <button
+          type="button"
+          id="btn-submit-puzzle"
+          class="pop-btn w-full bg-gradient-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-[#0f172a] font-pop text-xl sm:text-2xl font-bold py-3 px-6 rounded-2xl"
+        >
+          CHECK WORD! ⚡
+        </button>
+
+        <p
+          id="puzzle-nudge"
+          role="status"
+          aria-live="polite"
+          class="hidden text-sm font-extrabold text-amber-950 bg-amber-200 border-2 border-slate-900 rounded-xl py-2 px-3"
+        >
+          Not quite—swap or clear slots and try again!
+        </p>
+      </div>
+    </section>
+
+    <!-- STAGE 3: FINAL REVEAL SCREEN -->
+    <section id="screen-stage3" class="hidden flex-col items-center text-center space-y-5 relative">
+      <!-- Emerald, Lime, Gold & White Confetti Burst -->
+      <div id="confetti-burst" class="pointer-events-none absolute inset-0 overflow-hidden"></div>
+
+      <div class="inline-flex items-center gap-2 bg-lime-200 text-[#0f172a] font-extrabold text-xs sm:text-sm uppercase tracking-wider px-4 py-1.5 rounded-full pop-pill">
+        <span>⚡</span>
+        <span>Puzzle Solved!</span>
+        <span>⭐</span>
+      </div>
+
+      <!-- Large High-Contrast Reveal Banner using clamp(2.1rem, 6.5vw, 3.8rem) -->
+      <div class="w-full bg-gradient-to-r from-emerald-500 via-lime-400 to-emerald-500 border-4 border-slate-950 rounded-3xl p-4 sm:p-6 shadow-[6px_6px_0_#0f172a] animate-screen-enter">
+        <h2 class="font-pop fluid-reveal-banner font-bold text-[#0f172a] drop-shadow-[0_2px_0_rgba(255,255,255,0.8)]">
+          MY WISHLIST IS FOUND IN MOJOJOJO
+        </h2>
+      </div>
+
+      <!-- Detailed Custom SVG Portrait of Mojo Jojo (Green Monkey Face, Oversized Brain Dome, Purple Turban/Cape Accents) -->
+      <div class="flex flex-col items-center justify-center my-1 animate-buttercup-bounce">
+        <div class="bg-emerald-50 border-3 border-slate-950 rounded-3xl p-4 sm:p-5 shadow-[5px_5px_0_#0f172a]">
+          <svg class="w-48 h-52 sm:w-56 sm:h-60 mx-auto drop-shadow-[0_8px_12px_rgba(15,23,42,0.22)]" viewBox="0 0 220 240" role="img" aria-label="Mojo Jojo portrait with green monkey face, oversized brain dome, and purple turban and cape accents">
+            <!-- Purple Cape -->
+            <path d="M48,142 L18,224 L202,224 L172,142 Z" fill="#6d28d9" stroke="#0f172a" stroke-width="4.5" stroke-linejoin="round"/>
+            <path d="M62,146 L42,220 L178,220 L158,146 Z" fill="#7c3aed"/>
+
+            <!-- Oversized Dome with Exposed Pink & Lavender Brain -->
+            <path d="M48,94 C48,6 172,6 172,94 Z" fill="#f3e8ff" stroke="#0f172a" stroke-width="4.5" stroke-linejoin="round"/>
+            <path d="M64,80 C56,46 80,22 110,24 C140,22 164,46 156,80 Z" fill="#f472b6" stroke="#0f172a" stroke-width="3.5"/>
+            <path d="M78,66 C76,44 94,34 110,38 C126,34 144,44 142,66" fill="none" stroke="#c084fc" stroke-width="4" stroke-linecap="round"/>
+            <path d="M90,54 C94,42 104,40 110,44 M130,54 C126,42 116,40 110,44" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+            <line x1="110" y1="25" x2="110" y2="78" stroke="#0f172a" stroke-width="3"/>
+
+            <!-- Purple Turban Band & Gold Jewel -->
+            <rect x="48" y="76" width="124" height="18" rx="6" fill="#6d28d9" stroke="#0f172a" stroke-width="4"/>
+            <circle cx="110" cy="85" r="5.5" fill="#fbbf24" stroke="#0f172a" stroke-width="2"/>
+
+            <!-- Green Monkey Ears -->
+            <circle cx="52" cy="118" r="19" fill="#22c55e" stroke="#0f172a" stroke-width="4.5"/>
+            <circle cx="52" cy="118" r="9" fill="#15803d"/>
+            <circle cx="168" cy="118" r="19" fill="#22c55e" stroke="#0f172a" stroke-width="4.5"/>
+            <circle cx="168" cy="118" r="9" fill="#15803d"/>
+
+            <!-- Green Monkey Face -->
+            <ellipse cx="110" cy="122" rx="48" ry="42" fill="#22c55e" stroke="#0f172a" stroke-width="4.5"/>
+
+            <!-- Expressive Brow -->
+            <path d="M68,103 L103,116 L117,116 L152,103" fill="none" stroke="#0f172a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Eyes -->
+            <circle cx="90" cy="122" r="12.5" fill="#fef08a" stroke="#0f172a" stroke-width="3.8"/>
+            <circle cx="93" cy="122" r="5.5" fill="#dc2626"/>
+            <circle cx="91" cy="120" r="2" fill="#ffffff"/>
+
+            <circle cx="130" cy="122" r="12.5" fill="#fef08a" stroke="#0f172a" stroke-width="3.8"/>
+            <circle cx="127" cy="122" r="5.5" fill="#dc2626"/>
+            <circle cx="125" cy="120" r="2" fill="#ffffff"/>
+
+            <!-- Monkey Grin -->
+            <path d="M88,145 Q110,158 132,145" fill="#ffffff" stroke="#0f172a" stroke-width="3.8" stroke-linecap="round"/>
+            <line x1="100" y1="148" x2="100" y2="153" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="110" y1="149" x2="110" y2="154" stroke="#0f172a" stroke-width="2.5"/>
+            <line x1="120" y1="148" x2="120" y2="153" stroke="#0f172a" stroke-width="2.5"/>
+
+            <!-- Purple Tunic & Crossed Belt -->
+            <rect x="72" y="162" width="76" height="54" rx="12" fill="#6d28d9" stroke="#0f172a" stroke-width="4.5"/>
+            <line x1="74" y1="165" x2="146" y2="213" stroke="#ffffff" stroke-width="9"/>
+            <line x1="146" y1="165" x2="74" y2="213" stroke="#ffffff" stroke-width="9"/>
+            <circle cx="110" cy="189" r="9" fill="#fbbf24" stroke="#0f172a" stroke-width="3.2"/>
+          </svg>
+        </div>
+      </div>
+
+      <button
+        id="btn-play-again"
+        type="button"
+        class="pop-btn bg-gradient-to-r from-emerald-500 to-lime-400 hover:from-emerald-400 hover:to-lime-300 text-[#0f172a] font-pop text-xl sm:text-2xl font-bold px-8 py-3 rounded-2xl"
+      >
+        PLAY AGAIN ↺
+      </button>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full max-w-3xl text-center mt-4 text-xs sm:text-sm font-bold text-slate-800/80 z-10">
+    Sugar, Spice, and Everything Nice ⚡ Buttercup's Bolt &amp; Star Pop
+  </footer>
+
+  <!-- Game Logic & Web Audio Chimes -->
+  <script>
+    // --- Web Audio Synthesizer (Zero External Sound Assets) ---
+    let sfxEnabled = true;
+    let audioCtx = null;
+
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const AudioCtor = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtor) audioCtx = new AudioCtor();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playChime(freq, type = 'sine', dur = 0.13, delay = 0, vol = 0.13) {
+      if (!sfxEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+        gain.gain.setValueAtTime(vol, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + dur);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + dur);
+      } catch (err) {
+        // Ignore restricted audio environments
+      }
+    }
+
+    function sfxPop() {
+      playChime(587.33, 'sine', 0.11, 0, 0.14);
+      playChime(880, 'triangle', 0.13, 0.05, 0.13);
+    }
+
+    function sfxTileTap() {
+      playChime(659.25, 'triangle', 0.09, 0, 0.12);
+    }
+
+    function sfxNudge() {
+      playChime(330, 'sine', 0.12, 0, 0.11);
+    }
+
+    function sfxVictory() {
+      const notes = [523.25, 659.25, 783.99, 1046.5, 880, 1046.5];
+      const delays = [0, 0.11, 0.22, 0.34, 0.48, 0.62];
+      notes.forEach((n, idx) => playChime(n, 'triangle', 0.22, delays[idx], 0.16));
+    }
+
+    // --- Screen Controller ---
+    const screens = {
+      intro: document.getElementById('screen-intro'),
+      stage1: document.getElementById('screen-stage1'),
+      stage2: document.getElementById('screen-stage2'),
+      stage3: document.getElementById('screen-stage3'),
+    };
+
+    function showScreen(key) {
+      Object.values(screens).forEach((el) => {
+        el.classList.add('hidden');
+        el.classList.remove('flex', 'animate-screen-enter');
+      });
+      const target = screens[key];
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('flex', 'animate-screen-enter');
+      }
+    }
+
+    // --- Sound Toggle ---
+    document.getElementById('btn-sound').addEventListener('click', () => {
+      sfxEnabled = !sfxEnabled;
+      document.getElementById('sound-emoji').textContent = sfxEnabled ? '🔊' : '🔇';
+      document.getElementById('sound-text').textContent = sfxEnabled ? 'SFX' : 'OFF';
+      if (sfxEnabled) playChime(740, 'sine', 0.09);
+    });
+
+    // --- Stage 1: 10 Floating Emerald Bubbles & Lime Stars (~20-30s) ---
+    const TOTAL_TARGETS = 10;
+    const TARGET_LETTERS = ['M', 'O', 'J', 'O', 'J', 'O', 'J', 'O'];
+
+    let targetsPopped = 0;
+    let collectedLetters = [];
+    let isPoppingActive = false;
+    let spawnIntervalId = null;
+    let rafId = null;
+    let driftingItems = [];
+
+    const playfieldEl = document.getElementById('pop-playfield');
+
+    function updateHUDAndStage1() {
+      document.getElementById('hud-targets').textContent = `${targetsPopped}/${TOTAL_TARGETS}`;
+      document.getElementById('hud-letters').textContent = `${collectedLetters.length}/8`;
+      document.getElementById('stage1-popped').textContent = String(targetsPopped);
+
+      const pct = Math.min(100, Math.round((targetsPopped / TOTAL_TARGETS) * 100));
+      document.getElementById('stage1-progress').style.width = `${pct}%`;
+    }
+
+    function renderCollectedLetters() {
+      const tray = document.getElementById('stage1-letters');
+      if (collectedLetters.length === 0) {
+        tray.innerHTML = '<span class="text-xs font-semibold text-slate-500">Tap bubbles &amp; stars to collect 8 letters...</span>';
+        return;
+      }
+      tray.innerHTML = '';
+      collectedLetters.forEach((ltr) => {
+        const pill = document.createElement('span');
+        pill.className =
+          'inline-flex items-center justify-center w-8 h-8 rounded-xl bg-lime-400 border-2 border-slate-900 text-[#0f172a] font-pop font-bold text-base shadow-sm animate-screen-enter';
+        pill.textContent = ltr;
+        tray.appendChild(pill);
+      });
+    }
+
+    function spawnSparkleBurst(cx, cy, labelText) {
+      const colors = ['#10b981', '#84cc16', '#bef264', '#fbbf24', '#ffffff'];
+      for (let i = 0; i < 8; i++) {
+        const angle = (Math.PI * 2 * i) / 8;
+        const dist = 28 + Math.random() * 18;
+        const dx = `${Math.cos(angle) * dist}px`;
+        const dy = `${Math.sin(angle) * dist}px`;
+
+        const spark = document.createElement('span');
+        spark.className = 'sparkle-particle';
+        spark.style.left = `${cx}px`;
+        spark.style.top = `${cy}px`;
+        spark.style.setProperty('--dx', dx);
+        spark.style.setProperty('--dy', dy);
+        spark.style.backgroundColor = colors[i % colors.length];
+        playfieldEl.appendChild(spark);
+        setTimeout(() => spark.remove(), 540);
+      }
+
+      const txt = document.createElement('div');
+      txt.className = 'pop-label font-pop font-bold text-sm sm:text-base text-[#0f172a] bg-lime-200 border-2 border-slate-900 px-2.5 py-0.5 rounded-full shadow-sm';
+      txt.style.left = `${cx}px`;
+      txt.style.top = `${cy}px`;
+      txt.textContent = labelText;
+      playfieldEl.appendChild(txt);
+      setTimeout(() => txt.remove(), 580);
+    }
+
+    function spawnFloatingTarget() {
+      if (!isPoppingActive || targetsPopped >= TOTAL_TARGETS) return;
+      if (driftingItems.length >= 6) return;
+
+      const rect = playfieldEl.getBoundingClientRect();
+      const fieldW = rect.width || 480;
+      const fieldH = rect.height || 300;
+      const size = 56; // Generous 56px touch hitbox (>= 44px)
+
+      const x = 14 + Math.random() * Math.max(36, fieldW - size - 28);
+      const y = 14 + Math.random() * Math.max(36, fieldH - size - 28);
+
+      // Gentle drift for ~20-30s runtime
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.42 + Math.random() * 0.42;
+      const vx = Math.cos(angle) * speed;
+      const vy = Math.sin(angle) * speed;
+
+      // Award letters for the first 8 pops, and make pops 9 & 10 rewarding bonus star pops!
+      const isBonusStar = collectedLetters.length >= 8 || Math.random() < 0.45;
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.setAttribute('aria-label', isBonusStar ? 'Pop lime star' : 'Pop emerald bubble');
+      btn.style.width = `${size}px`;
+      btn.style.height = `${size}px`;
+      btn.style.left = `${x}px`;
+      btn.style.top = `${y}px`;
+      btn.className =
+        'absolute rounded-full flex items-center justify-center cursor-pointer touch-action:manipulation transition-transform hover:scale-110 active:scale-90 ' +
+        (isBonusStar
+          ? 'bg-gradient-to-br from-lime-200 via-lime-400 to-amber-200 border-3 border-slate-900 shadow-[0_6px_14px_rgba(132,204,22,0.35)]'
+          : 'bg-gradient-to-br from-white via-emerald-100 to-emerald-300 border-3 border-slate-900 shadow-[0_6px_14px_rgba(16,185,129,0.32)]');
+
+      btn.innerHTML = isBonusStar
+        ? '<span class="text-2xl sm:text-3xl leading-none pointer-events-none">⭐</span>'
+        : '<span class="text-2xl sm:text-3xl leading-none pointer-events-none">🫧</span>';
+
+      const targetObj = {
+        el: btn,
+        x,
+        y,
+        vx,
+        vy,
+        size,
+        isBonusStar,
+        popped: false,
+      };
+
+      btn.addEventListener('click', () => {
+        if (!isPoppingActive || targetObj.popped || targetsPopped >= TOTAL_TARGETS) return;
+        targetObj.popped = true;
+        sfxPop();
+
+        targetsPopped += 1;
+        let earnedChar = null;
+        if (collectedLetters.length < 8) {
+          earnedChar = TARGET_LETTERS[collectedLetters.length];
+          collectedLetters.push(earnedChar);
+          renderCollectedLetters();
+        }
+
+        updateHUDAndStage1();
+        spawnSparkleBurst(
+          targetObj.x + targetObj.size / 2,
+          targetObj.y + targetObj.size / 2,
+          earnedChar ? `POP! +${earnedChar}` : 'BONUS STAR! ⭐'
+        );
+
+        btn.remove();
+        driftingItems = driftingItems.filter((item) => item !== targetObj);
+
+        if (targetsPopped >= TOTAL_TARGETS) {
+          stopPopStage();
+          while (collectedLetters.length < 8) {
+            collectedLetters.push(TARGET_LETTERS[collectedLetters.length]);
+          }
+          renderCollectedLetters();
+          updateHUDAndStage1();
+          setTimeout(() => {
+            sfxVictory();
+            document.getElementById('stage1-complete').classList.remove('hidden');
+          }, 260);
+        }
+      });
+
+      playfieldEl.appendChild(btn);
+      driftingItems.push(targetObj);
+    }
+
+    function animatePlayfield() {
+      if (!isPoppingActive) return;
+      const rect = playfieldEl.getBoundingClientRect();
+      const maxX = Math.max(20, (rect.width || 480) - 60);
+      const maxY = Math.max(20, (rect.height || 300) - 60);
+
+      driftingItems.forEach((item) => {
+        if (item.popped) return;
+        item.x += item.vx;
+        item.y += item.vy;
+
+        if (item.x <= 8 || item.x >= maxX) item.vx *= -1;
+        if (item.y <= 8 || item.y >= maxY) item.vy *= -1;
+
+        item.x = Math.max(8, Math.min(maxX, item.x));
+        item.y = Math.max(8, Math.min(maxY, item.y));
+
+        item.el.style.left = `${item.x}px`;
+        item.el.style.top = `${item.y}px`;
+      });
+
+      rafId = requestAnimationFrame(animatePlayfield);
+    }
+
+    function stopPopStage() {
+      isPoppingActive = false;
+      clearInterval(spawnIntervalId);
+      if (rafId) cancelAnimationFrame(rafId);
+      driftingItems.forEach((item) => item.el.remove());
+      driftingItems = [];
+    }
+
+    function beginStage1() {
+      stopPopStage();
+      targetsPopped = 0;
+      collectedLetters = [];
+      updateHUDAndStage1();
+      renderCollectedLetters();
+      document.getElementById('stage1-complete').classList.add('hidden');
+      showScreen('stage1');
+
+      isPoppingActive = true;
+      for (let i = 0; i < 4; i++) {
+        spawnFloatingTarget();
+      }
+      spawnIntervalId = setInterval(spawnFloatingTarget, 900);
+      rafId = requestAnimationFrame(animatePlayfield);
+    }
+
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+      sfxPop();
+      beginStage1();
+    });
+
+    document.getElementById('btn-to-stage2').addEventListener('click', () => {
+      sfxTileTap();
+      beginStage2();
+    });
+
+    // --- Stage 2: 8-Slot Word Unscramble Puzzle (No Hints Before Solving) ---
+    const BANK_SEED = ['M', 'O', 'J', 'O', 'J', 'O', 'J', 'O'];
+    let bankLetters = [];
+    let slotsState = Array(8).fill(null); // slotIndex -> bankIndex or null
+
+    function shuffleCopy(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function makeScrambledBank() {
+      let shuffled = shuffleCopy(BANK_SEED);
+      if (shuffled.join('') === 'MOJOJOJO') {
+        shuffled = [...shuffled.slice(2), ...shuffled.slice(0, 2)];
+      }
+      return shuffled;
+    }
+
+    function beginStage2() {
+      bankLetters = makeScrambledBank();
+      slotsState = Array(8).fill(null);
+      document.getElementById('puzzle-nudge').classList.add('hidden');
+      renderStage2Board();
+      showScreen('stage2');
+    }
+
+    function evaluateWordSlots() {
+      const attempt = slotsState
+        .map((bIdx) => (bIdx !== null ? bankLetters[bIdx] : ''))
+        .join('');
+
+      if (attempt === 'MOJOJOJO') {
+        document.getElementById('puzzle-nudge').classList.add('hidden');
+        setTimeout(() => {
+          beginStage3();
+        }, 200);
+        return true;
+      }
+      return false;
+    }
+
+    function renderStage2Board() {
+      const slotsContainer = document.getElementById('answer-slots');
+      const bankContainer = document.getElementById('letter-bank');
+      slotsContainer.innerHTML = '';
+      bankContainer.innerHTML = '';
+
+      const usedBankIndices = new Set(slotsState.filter((v) => v !== null));
+
+      // Render 8 Answer Slots
+      for (let s = 0; s < 8; s++) {
+        const bIdx = slotsState[s];
+        const char = bIdx !== null ? bankLetters[bIdx] : '';
+        const slotBtn = document.createElement('button');
+        slotBtn.type = 'button';
+        slotBtn.setAttribute('aria-label', char ? `Slot ${s + 1} has ${char}, tap to return to bank` : `Empty slot ${s + 1}`);
+        slotBtn.className =
+          'w-11 h-12 sm:w-12 sm:h-13 rounded-2xl border-3 flex items-center justify-center font-pop font-bold text-xl sm:text-2xl touch-action:manipulation transition-all ' +
+          (char
+            ? 'bg-lime-400 border-slate-900 text-[#0f172a] shadow-[0_3px_0_#0f172a] cursor-pointer hover:bg-lime-300'
+            : 'bg-white border-dashed border-slate-400 text-slate-400 cursor-default');
+        slotBtn.textContent = char || '•';
+
+        if (char) {
+          slotBtn.addEventListener('click', () => {
+            sfxTileTap();
+            slotsState[s] = null;
+            document.getElementById('puzzle-nudge').classList.add('hidden');
+            renderStage2Board();
+          });
+        }
+
+        slotsContainer.appendChild(slotBtn);
+      }
+
+      // Render 8 Bank Tiles
+      bankLetters.forEach((char, idx) => {
+        const isUsed = usedBankIndices.has(idx);
+        const tileBtn = document.createElement('button');
+        tileBtn.type = 'button';
+        tileBtn.disabled = isUsed;
+        tileBtn.textContent = char;
+        tileBtn.setAttribute('aria-label', `Letter tile ${char}`);
+        tileBtn.className =
+          'pop-btn font-pop font-bold text-xl sm:text-2xl w-11 h-12 sm:w-12 sm:h-13 rounded-2xl flex items-center justify-center ' +
+          (isUsed ? 'bg-slate-200 text-slate-400' : 'bg-emerald-300 hover:bg-emerald-200 text-[#0f172a]');
+
+        tileBtn.addEventListener('click', () => {
+          const openSlot = slotsState.findIndex((val) => val === null);
+          if (openSlot === -1 || isUsed) return;
+          sfxTileTap();
+          slotsState[openSlot] = idx;
+          document.getElementById('puzzle-nudge').classList.add('hidden');
+          renderStage2Board();
+
+          if (!evaluateWordSlots() && slotsState.every((val) => val !== null)) {
+            sfxNudge();
+            const nudge = document.getElementById('puzzle-nudge');
+            nudge.classList.remove('hidden', 'animate-nudge');
+            void nudge.offsetWidth;
+            nudge.classList.add('animate-nudge');
+          }
+        });
+
+        bankContainer.appendChild(tileBtn);
+      });
+    }
+
+    document.getElementById('btn-shuffle').addEventListener('click', () => {
+      sfxTileTap();
+      bankLetters = makeScrambledBank();
+      slotsState = Array(8).fill(null);
+      document.getElementById('puzzle-nudge').classList.add('hidden');
+      renderStage2Board();
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      sfxTileTap();
+      slotsState = Array(8).fill(null);
+      document.getElementById('puzzle-nudge').classList.add('hidden');
+      renderStage2Board();
+    });
+
+    document.getElementById('btn-submit-puzzle').addEventListener('click', () => {
+      if (!evaluateWordSlots()) {
+        sfxNudge();
+        const nudge = document.getElementById('puzzle-nudge');
+        nudge.classList.remove('hidden', 'animate-nudge');
+        void nudge.offsetWidth;
+        nudge.classList.add('animate-nudge');
+      }
+    });
+
+    // --- Stage 3: Final Reveal Screen ---
+    function beginStage3() {
+      sfxVictory();
+      showScreen('stage3');
+      spawnCelebrationConfetti();
+    }
+
+    function spawnCelebrationConfetti() {
+      const container = document.getElementById('confetti-burst');
+      container.innerHTML = '';
+      const palette = ['#10b981', '#84cc16', '#bef264', '#fbbf24', '#ffffff'];
+      for (let i = 0; i < 40; i++) {
+        const bit = document.createElement('div');
+        bit.className = 'confetti-bit';
+        bit.style.left = `${Math.random() * 100}%`;
+        bit.style.backgroundColor = palette[i % palette.length];
+        bit.style.animationDelay = `${Math.random() * 1.4}s`;
+        bit.style.animationDuration = `${1.8 + Math.random() * 1.4}s`;
+        container.appendChild(bit);
+      }
+    }
+
+    // --- Restart / Play Again ---
+    function resetEntireGame() {
+      stopPopStage();
+      targetsPopped = 0;
+      collectedLetters = [];
+      slotsState = Array(8).fill(null);
+      updateHUDAndStage1();
+      renderCollectedLetters();
+      showScreen('intro');
+    }
+
+    document.getElementById('btn-restart').addEventListener('click', () => {
+      sfxTileTap();
+      resetEntireGame();
+    });
+
+    document.getElementById('btn-play-again').addEventListener('click', () => {
+      sfxPop();
+      resetEntireGame();
+    });
+  </script>
+</body>
+</html>
